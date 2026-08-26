@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b4bd4" />
+  <meta name="description" content="הוספת לוגו או סימן מים לתמונות, ישירות במכשיר וללא העלאה לשרת." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>חותמת — סימן מים לתמונות</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">ח</div>
+    <div class="brand">חותמת</div>
+    <button class="icon-button" id="resetButton" type="button" aria-label="איפוס הכל" title="איפוס הכל">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.93 4.93a10 10 0 1 1-1.5 11.3M3 5v6h6"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h1>מגנים על כל תמונה</h1>
+      <p>בחרו תמונה ולוגו, עצבו את סימן המים והורידו מיד.</p>
+    </section>
+
+    <section class="setup" aria-label="בחירת קבצים">
+      <label class="photo-drop" id="photoDrop">
+        <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" />
+        <span class="upload-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 16.5V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2.5M12 4v11m-4-7 4-4 4 4"/></svg>
+        </span>
+        <strong>בחירת תמונה</strong>
+        <small>או גררו לכאן · JPG, PNG, WEBP</small>
+      </label>
+
+      <div class="logo-row">
+        <div class="logo-thumb" id="logoThumb" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 16l4.5-5 3 3 2.5-3 6 7H4zM7.5 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+        </div>
+        <div class="logo-copy">
+          <strong>לוגו לסימן המים</strong>
+          <span id="logoName">רצוי PNG עם רקע שקוף · נשמר אוטומטית</span>
+        </div>
+        <label class="secondary-button">
+          בחירת לוגו
+          <input id="logoInput" type="file" accept="image/*" />
+        </label>
+      </div>
+    </section>
+
+      <label class="quick-mode" id="quickModeCard">
+        <span class="quick-copy">
+          <strong>יצירה מהירה</strong>
+          <small>כל תמונה חדשה תרד אוטומטית עם הלוגו וההגדרות השמורות</small>
+        </span>
+        <span class="switch">
+          <input id="quickMode" type="checkbox" />
+          <span aria-hidden="true"></span>
+        </span>
+      </label>
+    <section class="editor" id="editor" aria-label="עריכת סימן המים">
+      <div class="section-title">
+        <h2>תצוגה מקדימה</h2>
+        <span id="canvasHint">העלו תמונה כדי להתחיל</span>
+      </div>
+      <div class="canvas-shell" id="canvasShell">
+        <canvas id="canvas" width="1200" height="800"></canvas>
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16l4.5-5 3 3 2.5-3 6 7H4zM7.5 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+          <strong>התמונה שלכם תופיע כאן</strong>
+          <button id="emptyUpload" type="button">בחירת תמונה</button>
+        </div>
+      </div>
+
+      <div class="controls" id="controls">
+        <fieldset class="mode-control">
+          <legend>סגנון סימן המים</legend>
+          <div class="segmented">
+            <label><input type="radio" name="mode" value="repeat" checked /><span><svg viewBox="0 0 24 24"><path d="M4 4h5v5H4zm11 0h5v5h-5zM4 15h5v5H4zm11 0h5v5h-5z"/></svg>חוזר</span></label>
+            <label><input type="radio" name="mode" value="single" /><span><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/></svg>יחיד</span></label>
+          </div>
+        </fieldset>
+
+        <label class="range-control">
+          <span>שקיפות <output id="opacityValue">35%</output></span>
+          <input id="opacity" type="range" min="5" max="100" value="35" />
+        </label>
+        <label class="range-control">
+          <span>גודל <output id="sizeValue">22%</output></span>
+          <input id="size" type="range" min="8" max="60" value="22" />
+        </label>
+        <label class="range-control" id="spacingControl">
+          <span>מרווח <output id="spacingValue">55%</output></span>
+          <input id="spacing" type="range" min="10" max="120" value="55" />
+        </label>
+
+        <div class="single-options" id="singleOptions" hidden>
+          <span>מיקום</span>
+          <div class="position-grid" role="radiogroup" aria-label="מיקום הלוגו">
+            <button data-position="0,0" type="button" aria-label="שמאל עליון"></button><button data-position=".5,0" type="button" aria-label="מרכז עליון"></button><button data-position="1,0" type="button" aria-label="ימין עליון"></button>
+            <button data-position="0,.5" type="button" aria-label="שמאל מרכז"></button><button data-position=".5,.5" type="button" aria-label="מרכז"></button><button data-position="1,.5" type="button" aria-label="ימין מרכז"></button>
+            <button data-position="0,1" type="button" aria-label="שמאל תחתון"></button><button data-position=".5,1" type="button" aria-label="מרכז תחתון"></button><button data-position="1,1" class="active" type="button" aria-label="ימין תחתון"></button>
+          </div>
+          <small>אפשר גם לגרור את הלוגו ישירות על התמונה</small>
+        </div>
+
+        <details class="advanced">
+          <summary>אפשרויות שמירה</summary>
+          <div class="advanced-row">
+            <label>פורמט
+              <select id="format"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WEBP</option></select>
+            </label>
+            <label>איכות
+              <select id="quality"><option value="0.92">גבוהה</option><option value="0.8">רגילה</option><option value="1">מרבית</option></select>
+            </label>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <div class="bottom-action">
+    <button class="download-button" id="downloadButton" type="button" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 18v2h16v-2"/></svg>
+      הורדת תמונה מוגנת
+    </button>
+    <p><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 2.8 8.1 7 10 4.2-1.9 7-5.5 7-10V6l-7-3zm-2 9 1.5 1.5L15 10"/></svg>העיבוד מתבצע רק במכשיר שלכם. התמונות לא נשלחות לשום שרת.</p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
