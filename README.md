@@ -30,8 +30,7 @@ If the app is hosted by a third-party provider, that provider may still collect 
 2. Select a logo.
 3. Choose a single or repeating watermark.
 4. Adjust the watermark settings and position.
-55555555555.
-5Select **Download protected image**.
+5. Select **Download protected image**.
 
 ### Quick Mode
 
